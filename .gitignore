@@ -29,6 +29,7 @@ Thumbs.db
 # IDEs e editores
 # IntelliJ IDEA
 **/.idea/
+.idea
 /**/*.iml
 /.idea/
 *.iws

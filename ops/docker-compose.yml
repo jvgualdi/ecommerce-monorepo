@@ -1,10 +1,9 @@
 services:
   postgres:
     image: postgres:15
-    container_name: ecommerce-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: catalog
+      POSTGRES_DB: ecommerce
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -14,11 +13,76 @@ services:
 
   redis:
     image: redis:7
-    container_name: ecommerce-redis
     restart: unless-stopped
     ports:
       - "6379:6379"
 
+  catalog-service:
+    build:
+      context: ../backend/catalog-service
+      dockerfile: Dockerfile
+    depends_on: [postgres, redis]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5433/ecommerce
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_REDIS_HOST: redis
+    ports:
+      - "8081:8080"
+    networks:
+      - backend-net
+
+  cart-service:
+    build:
+      context: ../backend/cart-service
+      dockerfile: Dockerfile
+    depends_on: [redis]
+    environment:
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SERVER_PORT: 8082
+    ports:
+      - "8082:8082"
+    networks:
+      - backend-net
+
+#  order-service:
+#    build:
+#      context: ./backend/order-service
+#      dockerfile: Dockerfile
+#    depends_on: [ postgres ]
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce
+#    networks: [ backend-net ]
+#    ports: [ "8083:8080" ]
+#
+#  notification-service:
+#    build:
+#      context: ./backend/notification-service
+#      dockerfile: Dockerfile
+#    networks: [ backend-net ]
+#    ports: [ "8084:8080" ]
+#
+#  user-service:
+#    build:
+#      context: ./backend/user-service
+#      dockerfile: Dockerfile
+#    depends_on: [ postgres ]
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce
+#    networks: [ backend-net ]
+#    ports: [ "8085:8080" ]
+#
+#  payment-simulator:
+#    build:
+#      context: ./backend/payment-service
+#      dockerfile: Dockerfile
+#    networks: [ backend-net ]
+#    ports: [ "8086:8080" ]
+#
 volumes:
   postgres-data:
-    driver: local
+
+networks:
+  backend-net:
+    driver: bridge

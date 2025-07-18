@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: cart-service
+  redis:
+    host: ${SPRING_REDIS_HOST:redis}
+    port: ${SPRING_REDIS_PORT:6379}
+  cache:
+    type: redis
+server:
+  port: ${SERVER_PORT:8082}
+logging:
+  level:
+    com.jvgualdi.cart: DEBUG

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: notification-service
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:rabbitmq}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:guest}
+    password: ${SPRING_RABBITMQ_PASSWORD:guest}
+  cache:
+    type: none
+server:
+  port: ${SERVER_PORT:8084}
+logging:
+  level:
+    com.jvgualdi.notification: DEBUG
