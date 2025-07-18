@@ -23,7 +23,7 @@ Thumbs.db
 # Dependências e caches
 /backend/**/.mvn/
 /backend/**/.settings/
-
+/backend/**/META-INF/
 /backend/**/*.log
 
 # IDEs e editores
@@ -31,9 +31,9 @@ Thumbs.db
 **/.idea/
 .idea
 /**/*.iml
-/.idea/
 *.iws
 *.ipr
+*.iml
 
 # Eclipse
 /.classpath
